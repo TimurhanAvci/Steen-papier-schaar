@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Steen Papier Schaar</title>
+
+  <style>
+
+    /* Pagina stijl */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Game box */
+    .game {
+      background-color: white;
+      width: 420px;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Titel */
+    h1 {
+      color: #0f172a;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    /* Knoppen */
+    .buttons button {
+      width: 90px;
+      height: 90px;
+      margin: 10px;
+      border: none;
+      border-radius: 50%;
+      font-size: 35px;
+      cursor: pointer;
+      background-color: #2563eb;
+      transition: 0.2s;
+    }
+
+    /* Hover effect */
+    .buttons button:hover {
+      background-color: #1d4ed8;
+      transform: scale(1.08);
+    }
+
+    /* Keuzes */
+    .choices {
+      margin-top: 30px;
+      font-size: 22px;
+      color: #334155;
+    }
+
+    /* Resultaat tekst */
+    .result {
+      margin-top: 25px;
+      font-size: 28px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    /* Win kleur */
+    .win {
+      color: #16a34a;
+    }
+
+    /* Lose kleur */
+    .lose {
+      color: #dc2626;
+    }
+
+    /* Draw kleur */
+    .draw {
+      color: #ca8a04;
+    }
+
+    /* Scorebord */
+    .scoreboard {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-around;
+      font-size: 20px;
+      color: #0f172a;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="game">
+
+    <!-- Titel -->
+    <h1>🎮 Steen Papier Schaar</h1>
+
+    <!-- Buttons -->
+    <div class="buttons">
+
+      <button onclick="playGame('steen')">🪨</button>
+
+      <button onclick="playGame('papier')">📄</button>
+
+      <button onclick="playGame('schaar')">✂️</button>
+
+    </div>
+
+    <!-- Keuzes -->
+    <div class="choices">
+
+      <p>Jij: <span id="playerChoice">-</span></p>
+
+      <p>Computer: <span id="computerChoice">-</span></p>
+
+    </div>
+
+    <!-- Resultaat -->
+    <div class="result" id="result">
+
+      Kies een optie
+
+    </div>
+
+    <!-- Score -->
+    <div class="scoreboard">
+
+      <p>👤 Jij: <span id="playerScore">0</span></p>
+
+      <p>💻 Computer: <span id="computerScore">0</span></p>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    // Mogelijke keuzes
+    const choices = ['steen', 'papier', 'schaar'];
+
+    // Emoji lijst
+    const emojis = {
+
+      steen: '🪨',
+      papier: '📄',
+      schaar: '✂️'
+
+    };
+
+    // Scores
+    let playerScore = 0;
+
+    let computerScore = 0;
+
+    // Game functie
+    function playGame(playerChoice) {
+
+      // Random nummer
+      const randomNumber = Math.floor(Math.random() * 3);
+
+      // Computer keuze
+      const computerChoice = choices[randomNumber];
+
+      // Keuzes tonen
+      document.getElementById('playerChoice').innerHTML = emojis[playerChoice];
+
+      document.getElementById('computerChoice').innerHTML = emojis[computerChoice];
+
+      // Resultaat element
+      const result = document.getElementById('result');
+
+      // Gelijkspel
+      if (playerChoice === computerChoice) {
+
+        result.innerHTML = '🤝 Gelijkspel';
+
+        result.className = 'result draw';
+
+      }
+
+      // Win situaties
+      else if (
+
+        (playerChoice === 'steen' && computerChoice === 'schaar') ||
+
+        (playerChoice === 'papier' && computerChoice === 'steen') ||
+
+        (playerChoice === 'schaar' && computerChoice === 'papier')
+
+      ) {
+
+        result.innerHTML = '🎉 Jij wint!';
+
+        result.className = 'result win';
+
+        playerScore++;
+
+      }
+
+      // Verlies
+      else {
+
+        result.innerHTML = '💻 Computer wint!';
+
+        result.className = 'result lose';
+
+        computerScore++;
+
+      }
+
+      // Scores updaten
+      document.getElementById('playerScore').innerHTML = playerScore;
+
+      document.getElementById('computerScore').innerHTML = computerScore;
+
+    }
+
+  </script>
+
+</body>
+</html>
