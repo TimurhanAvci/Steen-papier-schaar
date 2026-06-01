@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steen, Papier, Schaar</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f4f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .game {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a18;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #888780;
+      margin-bottom: 2rem;
+    }
+
+    .score-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .score-card {
+      flex: 1;
+      background: #f5f4f0;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .score-label {
+      font-size: 12px;
+      color: #888780;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .score-num {
+      font-size: 28px;
+      font-weight: 600;
+      color: #1a1a18;
+    }
+
+    .score-num.jij   { color: #185FA5; }
+    .score-num.pc    { color: #993C1D; }
+    .score-num.gelijk { color: #3B6D11; }
+
+    .arena {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .side {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid #e5e4e0;
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .side-label {
+      font-size: 12px;
+      color: #888780;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .choice-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a18;
+      min-height: 24px;
+    }
+
+    .vs {
+      font-size: 18px;
+      font-weight: 600;
+      color: #b4b2a9;
+      flex-shrink: 0;
+    }
+
+    .result-banner {
+      text-align: center;
+      padding: 0.875rem 1rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      font-size: 15px;
+      font-weight: 500;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f4f0;
+      color: #888780;
+      transition: all 0.3s;
+    }
+
+    .result-banner.win   { background: #EAF3DE; color: #27500A; }
+    .result-banner.lose  { background: #FAECE7; color: #4A1B0C; }
+    .result-banner.draw  { background: #E6F1FB; color: #042C53; }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      flex: 1;
+      max-width: 160px;
+      padding: 0.875rem 1rem;
+      border-radius: 10px;
+      border: 1px solid #d3d1c7;
+      background: #ffffff;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      color: #1a1a18;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn:hover  { background: #f5f4f0; }
+    .btn:active { transform: scale(0.96); }
+
+    .btn-icon  { font-size: 28px; }
+    .btn-label { font-size: 13px; color: #888780; }
+  </style>
+</head>
+<body>
+
+<div class="game">
+  <h1>Steen, papier, schaar</h1>
+  <p class="subtitle">Speel tegen de computer — eindeloos!</p>
+
+  <!-- Scorebord -->
+  <div class="score-bar">
+    <div class="score-card">
+      <div class="score-label">Jij</div>
+      <div class="score-num jij" id="scoreJij">0</div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">Gelijk</div>
+      <div class="score-num gelijk" id="scoreGelijk">0</div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">Computer</div>
+      <div class="score-num pc" id="scorePC">0</div>
+    </div>
+  </div>
+
+  <!-- Arena -->
+  <div class="arena">
+    <div class="side">
+      <div class="side-label">Jouw keuze:</div>
+      <span class="choice-name" id="human">—</span>
+    </div>
+    <div class="vs">vs</div>
+    <div class="side">
+      <div class="side-label">Computer:</div>
+      <span class="choice-name" id="computer">—</span>
+    </div>
+  </div>
+
+  <!-- Uitkomst banner -->
+  <div class="result-banner" id="result">Maak je keuze!</div>
+
+  <!-- Knoppen -->
+  <div class="buttons">
+    <button class="btn" id="steenBtn" data-keuze="Steen">
+      <span class="btn-icon">✊</span>
+      <span class="btn-label">Steen</span>
+    </button>
+    <button class="btn" id="papierBtn" data-keuze="Papier">
+      <span class="btn-icon">✋</span>
+      <span class="btn-label">Papier</span>
+    </button>
+    <button class="btn" id="schaarBtn" data-keuze="Schaar">
+      <span class="btn-icon">✌️</span>
+      <span class="btn-label">Schaar</span>
+    </button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
